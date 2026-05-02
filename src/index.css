@@ -149,7 +149,16 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.5);
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
+
+.hero-desc {
+  margin: 0 auto;
+  color: #1f2937 !important;
+  font-weight: 500;
+}
+
 
 /* Heritage Section */
 #heritage {
@@ -432,7 +441,19 @@ section {
   z-index: 10;
 }
 
+/* 3D Scene */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Floating Interactive Icons */
+
 .floating-icons {
   position: fixed;
   top: 0;

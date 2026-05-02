@@ -1,8 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float, MeshDistortMaterial, Sphere, PerspectiveCamera } from '@react-three/drei';
 
 gsap.registerPlugin(ScrollTrigger);
+
+function AnimatedSphere() {
+  const mesh = useRef();
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    mesh.current.rotation.x = Math.cos(time / 4) * 0.2;
+    mesh.current.rotation.y = Math.sin(time / 2) * 0.2;
+  });
+
+  return (
+    <Float speed={4} rotationIntensity={1} floatIntensity={2}>
+      <Sphere ref={mesh} args={[1, 100, 200]} scale={2.4}>
+        <MeshDistortMaterial
+          color="#f43f5e"
+          attach="material"
+          distort={0.4}
+          speed={1.5}
+          roughness={0}
+          metalness={0.8}
+        />
+      </Sphere>
+    </Float>
+  );
+}
+
+function Scene3D() {
+  return (
+    <div className="canvas-container">
+      <Canvas>
+        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <pointLight position={[-10, -10, -10]} intensity={1} color="#fb7185" />
+        <AnimatedSphere />
+      </Canvas>
+    </div>
+  );
+}
 
 const translations = {
   en: {
@@ -113,6 +153,7 @@ const translations = {
   }
 };
 
+
 function App() {
   const [lang, setLang] = useState('en');
   const containerRef = useRef();
@@ -205,7 +246,9 @@ function App() {
 
   return (
     <div dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <Scene3D />
       <div className="bg-overlay">
+
         <div className="bg-orb orb-1"></div>
         <div className="bg-orb orb-2"></div>
       </div>
@@ -252,9 +295,10 @@ function App() {
           <div className="hero-content">
             <h2 className="subtitle">{t.subtitle}</h2>
             <h1 className="title">{t.title}</h1>
-            <p className="description" style={{ margin: '0 auto', color: '#555' }}>
+            <p className="description hero-desc">
               {t.heroDesc}
             </p>
+
             <a href="#menu" className="btn">{t.heroBtn}</a>
           </div>
         </section>
